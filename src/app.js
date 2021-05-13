@@ -4,6 +4,7 @@ const path = require('path');
 const YAML = require('yamljs');
 const userRouter = require('./resources/users/user.router');
 const boardRouter = require('./resources/boards/board.router');
+const taskRouter = require('./resources/tasks/task.router');
 const errorHandle = require('./errors/errorHandle');
 
 const app = express();
@@ -23,6 +24,7 @@ app.use('/', (req, res, next) => {
 
 app.use('/users', userRouter);
 app.use('/boards', boardRouter);
+app.use('/boards/:boardId/tasks', taskRouter);
 
 app.use(errorHandle);
 
