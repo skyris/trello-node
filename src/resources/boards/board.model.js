@@ -37,7 +37,7 @@ class Board {
       this.title = title;
     }
     if (columns !== undefined && Array.isArray(columns)) {
-      for (let i = 0; i < this.columns.length; i =+ 1) {
+      for (let i = 0; i < this.columns.length; i += 1) {
         columns
           .filter(col => col.id)
           .forEach(col => {

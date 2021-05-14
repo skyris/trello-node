@@ -8,7 +8,7 @@ const readAll = async () => DB.readAll(TABLE_NAME);
 const read = async id => {
   const board = await DB.read(TABLE_NAME, id);
   if (!board) {
-    throw new NOT_FOUND_ERROR(`Couldn't find a board with id: ${id}`);
+    throw new NOT_FOUND_ERROR(TABLE_NAME, {id});
   }
 
   return board;
@@ -16,7 +16,7 @@ const read = async id => {
 
 const remove = async id => {
   if (!(await DB.remove(TABLE_NAME, id))) {
-    throw new NOT_FOUND_ERROR(`Couldn't find a board with id: ${id}`);
+    throw new NOT_FOUND_ERROR(TABLE_NAME, {id});
   }
 };
 
@@ -25,9 +25,8 @@ const create = async board => DB.create(TABLE_NAME, board);
 const update = async (propsObject, userData) => {
   const element = await DB.update(TABLE_NAME, propsObject, userData);
   if (!element) {
-    throw new NOT_FOUND_ERROR(
-      `Couldn't find a board with id: ${propsObject.id}`
-    );
+    const {id} = propsObject;
+    throw new NOT_FOUND_ERROR(TABLE_NAME, {id});
   }
 
   return element;

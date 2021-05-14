@@ -51,9 +51,8 @@ const filterByProperties = (tableName, propsObject) => {
     elements = elements
       .filter(el => el[keys[i]] === propsObject[keys[i]]);
     if (!elements.length) {
-      throw new NOT_FOUND_ERROR(
-        `Couldn't find a ${tableName} with ${keys[i]} ${propsObject[keys[i]]}`
-      );
+      const obj = {[keys[i]]: propsObject[keys[i]]}
+      throw new NOT_FOUND_ERROR(tableName, obj);
     }
   }
 

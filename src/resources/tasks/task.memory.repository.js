@@ -23,9 +23,8 @@ const create = async (boardId, task) => DB.create(TABLE_NAME, boardId, task);
 const update = async (propsObject, taskData) => {
   const element = await DB.update(TABLE_NAME, propsObject, taskData);
   if (!element) {
-    throw new NOT_FOUND_ERROR(
-      `Couldn't find a task with id: ${propsObject.id}`
-    );
+    const {id} = propsObject;
+    throw new NOT_FOUND_ERROR(TABLE_NAME, {id});
   }
 
   return element;

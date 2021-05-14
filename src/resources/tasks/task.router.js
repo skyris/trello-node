@@ -14,8 +14,6 @@ router.route('/').get(
 router.route('/:taskId').get(
   wrapAsync(async (req, res) => {
     const {boardId, taskId: id} = req.params;
-    console.log('++++++++++++++++++++++++++++++++++++++++++++++');
-    console.log('task get: ', req.params);
     const task = await tasksService.findOne({boardId, id});
     res.status(200).send(Task.toResponse(task));
   })
