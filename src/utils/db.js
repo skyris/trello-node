@@ -1,4 +1,8 @@
 const NOT_FOUND_ERROR = require('../errors/notFoundError');
+const User = require('../resources/users/user.model');
+const Board = require('../resources/boards/board.model');
+const Task = require('../resources/tasks/task.model');
+const Column = require('../resources/columns/column.model');
 
 const db = {
   Users: [],
@@ -26,6 +30,31 @@ const db = {
     console.log('Task: ', task);
   }
 };
+
+// ------------------------------------------------------------------
+// init DB with mock data
+// ------------------------------------------------------------------
+(() => {
+  const users = [
+    new User({name: 'Mr Smith', login: 'MrSmith', password: 'myPass'}),
+    new User({name: 'John Dow', login: 'John', password: 'myPass07'}),
+    new User({name: 'Jane Dow', login: 'Jane', password: 'myPass09'})
+  ];
+  const columns = [new Column(), new Column({order: 1})];
+  const board = new Board({columns});
+  const tasks = [
+    new Task({
+      boardId: board.id, userId: users[0].id, columnId: columns[0].id
+    }),
+    new Task({
+      boardId: board.id, userId: users[1].id, columnId: columns[0].id
+    })
+  ];
+  db.Users.push(...users);
+  db.Boards.push(board);
+  db.Tasks.push(...tasks);
+})();
+// ------------------------------------------------------------------
 
 const readAll = tableName => db[tableName].filter(element => element);
 
