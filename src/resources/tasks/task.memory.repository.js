@@ -1,6 +1,10 @@
 const DB = require('../../utils/db');
 const NOT_FOUND_ERROR = require('../../errors/notFoundError');
 
+/**
+ * Table Name
+ * @type {string}
+ */
 const TABLE_NAME = 'Tasks';
 
 const find = async propsObject => {
