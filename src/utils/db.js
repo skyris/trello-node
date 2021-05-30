@@ -3,7 +3,19 @@ const User = require('../resources/users/user.model');
 const Board = require('../resources/boards/board.model');
 const Task = require('../resources/tasks/task.model');
 const Column = require('../resources/columns/column.model');
-
+/**
+ * @typedef {Object} dataBase
+ * @property {Array<User>} Users
+ * @property {Array<Board>} Boards
+ * @property {Array<Task>} Tasks
+ * @property {Function} fixUsersStructure
+ * @property {Function} fixBoardsStructure
+ * @property {Function} fixTasksStructure
+ */
+/**
+ * Handmade Data Base
+ * @type {dataBase}
+ */
 const db = {
   Users: [],
   Boards: [],
@@ -55,9 +67,28 @@ const db = {
   db.Tasks.push(...tasks);
 })();
 // ------------------------------------------------------------------
-
+/**
+ * @typedef {('Users'|'Boards'|'Tasks')} TableName 
+ */
+/**
+ * @typedef {(Promise<User>|Promise<Board>|Promise<Task>)} PromiseElementFromDB
+ */
+/**
+ * @typedef {(Array<User>|Array<Board>|Array<Task>)} ArrayOfDBElements
+ */
+/**
+ * Get all elements from DB
+ * @param {TableName} tableName 
+ * @returns {ArrayOfDBElements}
+ */
 const readAll = tableName => db[tableName].filter(element => element);
-
+/**
+ * Get element by id from DB
+ * @param {TableName} tableName 
+ * @param {string} id 
+ * @returns {(User|Board|Task)}
+ * @throws {Error}
+ */
 const read = (tableName, id) => {
   const elements = db[tableName]
     .filter(el => el)
@@ -72,7 +103,13 @@ const read = (tableName, id) => {
 
   return elements[0];
 };
-
+/**
+ * get element by properties from DB 
+ * @param {TableName} tableName 
+ * @param {Object} propsObject 
+ * @returns {ArrayOfDBElements}
+ * @throws {NOT_FOUND_ERROR}
+ */
 const filterByProperties = (tableName, propsObject) => {
   let elements = db[tableName].filter(el => el);
   const keys = Object.keys(propsObject);
@@ -87,7 +124,12 @@ const filterByProperties = (tableName, propsObject) => {
 
   return elements;
 };
-
+/**
+ * Remove element by id from DB 
+ * @param {TableName} tableName 
+ * @param {Object} propsObject 
+ * @returns {PromiseElementFromDB}
+ */
 const remove = async (tableName, id) => {
   const element = read(tableName, id);
   if (element) {
@@ -99,13 +141,24 @@ const remove = async (tableName, id) => {
 
   return element;
 };
-
+/**
+ * Save new element to DB
+ * @param {TableName} tableName 
+ * @param {(User|Board|Task)} element 
+ * @returns {PromiseElementFromDB}
+ */
 const create = async (tableName, element) => {
   db[tableName].push(element);
 
   return read(tableName, element.id);
 };
-
+/**
+ * Update data in DB
+ * @param {TableName} tableName 
+ * @param {Object} propsObject 
+ * @param {Object} newData 
+ * @returns {PromiseElementFromDB}
+ */
 const update = async (tableName, propsObject, newData) => {
   const oldElement = filterByProperties(tableName, propsObject)[0];
   if (oldElement) {
